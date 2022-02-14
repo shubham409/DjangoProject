@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'customapi',
     'allmodels',
+    'queryapi',
     'relationships',
     'validators',
     'rest_framework',

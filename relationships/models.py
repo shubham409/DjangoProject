@@ -49,3 +49,6 @@ class Society(models.Model):
     society_name = models.CharField(max_length=50)
     def __str__(self) -> str:
         return self.society_name
+
+
+
