@@ -1,12 +1,8 @@
-from distutils.archive_util import make_archive, make_zipfile
-from pyexpat import model
-from re import T
-from tkinter import CASCADE
-from unicodedata import name
-from django.db import models
 
+from django.db import models
 from django.core.validators import MaxLengthValidator,MinLengthValidator 
-from django.core import validators as vl
+
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 # Types of relation ship 
@@ -53,27 +49,3 @@ class Society(models.Model):
     society_name = models.CharField(max_length=50)
     def __str__(self) -> str:
         return self.society_name
-    
-
-
-
-class Student(models.Model):
-    student_name = models.CharField(max_length=50)
-    course = models.ManyToManyField('Course', through='RelationShip')
-
-    def __str__(self) -> str:
-        return self.student_name
-    
-class Course(models.Model):
-    course_name = models.CharField(max_length=50)
-
-    def __str__(self) -> str:
-        return self.course_name
-
-class RelationShip(models.Model):
-    student_name = models.ForeignKey('Student', on_delete=models.CASCADE)
-    course_name = models.ForeignKey('Course', on_delete=models.CASCADE)
-
-    level = models.CharField(max_length=50)
-    def __str__(self) -> str:   
-        return self.sutdent_name + "   " +self.course_name
