@@ -16,7 +16,7 @@ def users(request):
         }
         
     ]
-    return Response(json.dumps(context)) 
+    return Response(context) 
 
 @api_view()
 def single_object(request):
