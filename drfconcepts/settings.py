@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'customapi',
     'allmodels',
+    'relationships',
+    'validators',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
