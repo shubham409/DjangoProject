@@ -8,8 +8,8 @@ class Collegs(models.Model):
     branches = models.IntegerField(default=6)
     location = models.CharField(max_length=100 ,default="New Delhi")
     university = models.CharField(max_length=200, default = "IPU")
-
-
+    ranking = models.IntegerField(default=10)
+    certified = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -17,3 +17,5 @@ class Collegs(models.Model):
     class Meta:
         db_table = "collegs"
         verbose_name="College Table"
+
+
