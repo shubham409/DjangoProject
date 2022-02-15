@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from queryapi.custom_functions import give_error
+from queryapi.custom_functions import give_error, give_message, success_message
 from queryapi.serializers import StudentSerializer
 from queryapi.models import Student
-
+import json
+from django.db.models import Count , Max,Min,Avg,Sum
 # Create your views here.
 '''
 Model.objects.
@@ -177,3 +178,282 @@ class FilterNameStartsWith(APIView):
             return Response(give_error(message))
     
 
+# ----------------------------------------------------------------------
+
+class FilterContains(APIView):
+
+    def get(self, request , format=None):
+        contains = request.GET.get('contains')
+        return self.filter_contains(contains)
+
+    def post(self, request , format=None):
+        contains = request.POST.get('contains')
+        return self.filter_contains(contains)
+
+    def valid_filter(self,contains :str ):
+        try:
+            val=Student.objects.filter(name__contains=contains)
+            return val
+        except:
+            return None
+
+    def filter_contains(self,contains):
+        result = self.valid_filter(contains)
+        if result is not None :
+            serializer = StudentSerializer(result,many=True)
+            return Response(serializer.data)
+        else:
+            message = "Please enter Correct String"
+            return Response(give_error(message))
+
+
+class FilterIn(APIView):
+
+    def get(self, request , format=None):
+        json_object = json.loads(request.body)
+        iter = json_object.get('iter')
+        return self.filter_in(iter)
+
+    def post(self, request , format=None):
+        json_object = json.loads(request.body)
+        iter = json_object.get('iter')
+        return self.filter_in(iter)
+
+    def valid_filter(self,iter :str ):
+        try:
+            val=Student.objects.filter(roll__in=iter)
+            return val
+        except:
+            return None
+
+    def filter_in(self,iter):
+        result = self.valid_filter(iter)
+        if result is not None :
+            serializer = StudentSerializer(result,many=True)
+            return Response(serializer.data)
+        else:
+            message = "Please enter Correct String"
+            return Response(give_error(message))
+
+
+class OrderBy(APIView):
+
+    def get(self, request , format=None):
+        print(request.GET)
+        orderby = request.GET.get('orderby')
+        print(orderby)
+        field = request.GET.get('field')
+        print(field)
+        return self.order_by(orderby , field)
+
+    def post(self, request , format=None):
+        field = request.POST.get('field')
+        orderby = request.POST.get('orderby')
+        return self.order_by(orderby , field)
+
+    def valid_orderby(self, orderby :str, field_name:str):
+        try:
+            field =None
+            if orderby=='inc':
+                field = field_name
+            elif orderby=='dec':
+                field= '-'+field_name
+            else:
+                field = '?'
+            print(field)
+            val=Student.objects.order_by(field)
+            return val
+        except Exception as e:
+            print(e)
+            return None
+
+    def order_by(self,orderby,field_name):
+        result = self.valid_orderby(orderby,field_name)
+        if result is not None :
+            serializer = StudentSerializer(result,many=True)
+            return Response(serializer.data)
+        else:
+            message = "Please enter valid query "
+            return Response(give_error(message))
+# -------------------------------------------------------------
+
+class CreateStudent(APIView):
+
+    def get(self, request , format=None):
+        json_object = json.loads(request.body)
+        student = json_object.get('student')
+        print(student)
+        return self.create_student(student)
+
+    def post(self, request , format=None):
+        json_object = json.loads(request.body)
+        student = json_object.get('student')
+        print(student)
+        return self.create_student(student)
+
+    def valid_create(self,student :str ):
+        try:
+            name = student.get("name")
+            roll = student.get("roll")
+            if(name is not None and roll is not None):
+                val=Student.objects.create(name = name , roll= roll)
+                return val
+            else:
+                return None
+        except Exception as e:
+            print(e)
+            return None
+
+    def create_student(self,student):
+        result = self.valid_create(student)
+        print(result)
+        if result is not None :
+            message = f'{result} has been saved'
+            return Response(success_message(message))
+        else:
+            message = "Please enter Student with different roll no."
+            return Response(give_error(message))
+# ----------------------------------------------------------
+# Aggregate
+
+class AggregateCount(APIView):
+
+    def get(self, request , format=None):
+        return self.aggregate_count()
+
+    def post(self, request , format=None):
+        return self.aggregate_count()
+
+    def valid_count(self ):
+        try:
+            val=Student.objects.aggregate(Count('roll'))
+            return val
+
+        except Exception as e:
+            print(e)
+            return None
+
+    def aggregate_count(self):
+        result = self.valid_count()
+        print(result)
+        if result is not None :
+            message = f'count of the record is {result.get("roll__count")} '
+            return Response(success_message(message))
+        else:
+            message = "Please make valid request"
+            return Response(give_error(message))
+ 
+
+class AggregateSum(APIView):
+
+    def get(self, request , format=None):
+        return self.aggregate_Sum()
+
+    def post(self, request , format=None):
+        return self.aggregate_Sum()
+
+    def valid_Sum(self ):
+        try:
+            val=Student.objects.aggregate(Sum('roll'))
+            return val
+
+        except Exception as e:
+            print(e)
+            return None
+
+    def aggregate_Sum(self):
+        result = self.valid_Sum()
+        print(result)
+        if result is not None :
+            message = f'sum of the roll numbers is {result.get("roll__sum")} '
+            return Response(success_message(message))
+        else:
+            message = "Please make valid request"
+            return Response(give_error(message))
+# -----------------------------------------------------------
+# Or
+class StartsWithOrGreaterThan(APIView):
+
+    def get(self, request , format=None):
+        start_with = request.GET.get('startswith')
+        start_with_result = self.valid_startswith(start_with)
+        greater_than = request.GET.get('greaterthan')
+        greater_than_result = self.valid_greaterthan(greater_than)
+        return self.or_query(start_with_result,greater_than_result)
+
+
+    def post(self, request , format=None):
+        print(request.POST)
+        start_with = request.POST.get('startswith')
+        start_with_result = self.valid_startswith(start_with)
+        greater_than = request.POST.get('greaterthan')
+        greater_than_result = self.valid_greaterthan(greater_than)
+        return self.or_query(start_with_result,greater_than_result)
+
+    def or_query(self,start_with_result, greater_than_result):
+        if start_with_result is not None and greater_than_result is not None:
+            result = start_with_result | greater_than_result
+            serializer = StudentSerializer(result,many=True)
+            return Response(serializer.data)
+        else:
+            message = "Please enter valid query"
+            return Response(give_error(message))
+
+    def valid_greaterthan(self,value :str ):
+        try:
+            val=Student.objects.filter(roll__gte=value)
+            return val
+        except Exception as e :
+            print(e)
+            return None
+
+    def valid_startswith(self,start_with :str ):
+        try:
+            val=Student.objects.filter(name__startswith=start_with)
+            return val
+        except Exception as e :
+            print(e)
+            return None
+
+class StartsWithAndGreaterThan(APIView):
+
+    def get(self, request , format=None):
+        start_with = request.GET.get('startswith')
+        start_with_result = self.valid_startswith(start_with)
+        greater_than = request.GET.get('greaterthan')
+        greater_than_result = self.valid_greaterthan(greater_than)
+        return self.and_query(start_with_result,greater_than_result)
+
+    def post(self, request , format=None):
+        print(request.POST)
+        start_with = request.POST.get('startswith')
+        start_with_result = self.valid_startswith(start_with)
+        greater_than = request.POST.get('greaterthan')
+        greater_than_result = self.valid_greaterthan(greater_than)
+        return self.and_query(start_with_result,greater_than_result)
+
+    def and_query(self,start_with_result, greater_than_result):
+        if start_with_result is not None and greater_than_result is not None:
+            result = start_with_result & greater_than_result
+            serializer = StudentSerializer(result,many=True)
+            return Response(serializer.data)
+        else:
+            message = "Please enter valid query"
+            return Response(give_error(message))
+
+    def valid_greaterthan(self,value :str ):
+        try:
+            val=Student.objects.filter(roll__gte=value)
+            return val
+        except Exception as e :
+            print(e)
+            return None
+
+    def valid_startswith(self,start_with :str ):
+        try:
+            val=Student.objects.filter(name__startswith=start_with)
+            return val
+        except Exception as e :
+            print(e)
+            return None
+            

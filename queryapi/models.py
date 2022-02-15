@@ -5,6 +5,6 @@ class Student(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self) -> str:
-        return f'{self.name}  {self.roll}'
+        return f'{self.name} with roll no. {self.roll}'
 
 
