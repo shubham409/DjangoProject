@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'queryapi',
     'relationships',
     'validators',
+    'customadmin',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
