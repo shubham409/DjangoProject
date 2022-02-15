@@ -149,45 +149,6 @@ class GetStudentWithRoll(APIView):
             error='please enter valid roll'
             return Response(give_error(error))       
 
-# returns query set for which name start with given string 
-# working on post and get
-class FilterNameStartsWith(APIView):
-
-    def get(self, request , format=None):
-        print(request)
-        print('inside get method = ',request.GET)
-        start_with = request.GET.get('startswith')
-        if self.valid_filter(start_with) :
-            result = Student.objects.filter(name__startswith=start_with)
-            serializer = StudentSerializer(result,many=True)
-            return Response(serializer.data)
-        else:
-            error = {
-                'error':'Please Enter Valid String To Use Filter Starts With'
-            }
-            return Response(error)
-
-
-    def post(self, request , format=None):
-        print(request.POST)
-        start_with = request.POST.get('startswith')
-        if self.valid_filter(start_with) :
-            result = Student.objects.filter(name__startswith=start_with)
-            serializer = StudentSerializer(result,many=True)
-            return Response(serializer.data)
-        else:
-            error = {
-                'error':'Please Enter Valid String To Use Filter Starts With'
-            }
-            return Response(error)
-
-    def valid_filter(self,start_with :str ):
-        try:
-            Student.objects.filter(name__startswith=start_with)
-            return True
-        except:
-            return False
-
 
 class FilterNameStartsWith(APIView):
 
