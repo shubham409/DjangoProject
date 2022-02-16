@@ -32,23 +32,23 @@ permissions.IsAuthenticatedOrReadOnly
 '''
 
 
-class AllStudentsModelViewSet(viewsets.ModelViewSet):
-    queryset = Students.objects.all()
-    serializer_class = StudentSerializer
-    # authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]    
+# class AllStudentsModelViewSet(viewsets.ModelViewSet):
+#     queryset = Students.objects.all()
+#     serializer_class = StudentSerializer
+#     # authentication_classes = [BasicAuthentication]
+#     permission_classes = [IsAuthenticated]    
 
-class ReadonlyStudentsModelViewSet(viewsets.ModelViewSet):
-    queryset = Students.objects.all()
-    serializer_class = StudentSerializer
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [ DjangoModelPermissionsOrAnonReadOnly]  
+# class ReadonlyStudentsModelViewSet(viewsets.ModelViewSet):
+#     queryset = Students.objects.all()
+#     serializer_class = StudentSerializer
+#     authentication_classes = [BasicAuthentication]
+#     permission_classes = [ DjangoModelPermissionsOrAnonReadOnly]  
 
-class StaffStudentsModelViewSet(viewsets.ModelViewSet):
-    # only for staff users that is admin and staff simple users cant use this
-    queryset = Students.objects.all()
-    serializer_class = StudentSerializer
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAdminUser]  
+# class StaffStudentsModelViewSet(viewsets.ModelViewSet):
+#     # only for staff users that is admin and staff simple users cant use this
+#     queryset = Students.objects.all()
+#     serializer_class = StudentSerializer
+#     authentication_classes = [BasicAuthentication]
+#     permission_classes = [IsAdminUser]  
 
 

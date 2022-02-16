@@ -25,24 +25,30 @@ from drf_auth_perm.views import (
     )
 from rest_framework.routers import DefaultRouter
 
-router1 = DefaultRouter()
-router1.register('',AllStudentsModelViewSet,basename='students')
+# router1 = DefaultRouter()
+# router1.register('',AllStudentsModelViewSet,basename='students')
 
-router2 = DefaultRouter()
-router2.register('',ReadonlyStudentsModelViewSet,basename='students')
+# router2 = DefaultRouter()
+# router2.register('',ReadonlyStudentsModelViewSet,basename='students')
 
-router3 = DefaultRouter()
-router3.register('',StaffStudentsModelViewSet,basename='students')
+# router3 = DefaultRouter()
+# router3.register('',StaffStudentsModelViewSet,basename='students')
 
+
+
+router = DefaultRouter()
+router.register('',AllStudentsModelViewSet,basename='students')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('sample/',include('customapi.urls')),
     path('api/',include('queryapi.urls')),
-    path('all/',include(router1.urls)),
-    path('read/',include(router2.urls)),
-    path('staff/',include(router3.urls))
+    # path('all/',include(router1.urls)),
+    # path('read/',include(router2.urls)),
+    # path('staff/',include(router3.urls))
+
+    
 ]
 
 
