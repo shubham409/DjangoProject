@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'validators',
     'customadmin',
     'rest_framework',
+    'drf_auth_perm',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

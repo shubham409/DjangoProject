@@ -18,9 +18,35 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 
+from drf_auth_perm.views import (
+    AllStudentsModelViewSet,
+    StaffStudentsModelViewSet,
+    ReadonlyStudentsModelViewSet
+    )
+from rest_framework.routers import DefaultRouter
+
+router1 = DefaultRouter()
+router1.register('',AllStudentsModelViewSet,basename='students')
+
+router2 = DefaultRouter()
+router2.register('',ReadonlyStudentsModelViewSet,basename='students')
+
+router3 = DefaultRouter()
+router3.register('',StaffStudentsModelViewSet,basename='students')
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('sample/',include('customapi.urls')),
-    path('api/',include('queryapi.urls'))
-
+    path('api/',include('queryapi.urls')),
+    path('all/',include(router1.urls)),
+    path('read/',include(router2.urls)),
+    path('staff/',include(router3.urls))
 ]
+
+
+
+
+
+
