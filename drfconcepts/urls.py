@@ -19,11 +19,22 @@ from django.contrib import admin
 from django.urls import path , include
 
 from drf_auth_perm.views import (
-    AllStudentsModelViewSet,
-    StaffStudentsModelViewSet,
-    ReadonlyStudentsModelViewSet
+    # AllStudentsModelViewSet,
+    # StaffStudentsModelViewSet,
+    # ReadonlyStudentsModelViewSet,
+    TokenStudentModelViewSet,
+    GetCustomToken,
+    
+
     )
 from rest_framework.routers import DefaultRouter
+
+# for getting in build view to get token 
+from rest_framework.authtoken.views import obtain_auth_token
+
+
+
+
 
 # router1 = DefaultRouter()
 # router1.register('',AllStudentsModelViewSet,basename='students')
@@ -37,7 +48,8 @@ from rest_framework.routers import DefaultRouter
 
 
 router = DefaultRouter()
-router.register('',AllStudentsModelViewSet,basename='students')
+router.register('',TokenStudentModelViewSet,basename='students')
+
 
 
 urlpatterns = [
@@ -47,8 +59,10 @@ urlpatterns = [
     # path('all/',include(router1.urls)),
     # path('read/',include(router2.urls)),
     # path('staff/',include(router3.urls))
+    path('gettoken/',obtain_auth_token),
+    path('custom/',GetCustomToken.as_view()),
+    path('tokenauth/',include(router.urls))
 
-    
 ]
 
 
