@@ -1,4 +1,3 @@
-from multiprocessing import context
 from django.shortcuts import render
 from drf_auth_perm.models import Students
 from drf_auth_perm.serializers import StudentSerializer
@@ -12,12 +11,12 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
     DjangoModelPermissionsOrAnonReadOnly
-    
 )
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 # Create your views here.
 from rest_framework.response import Response
+from drf_auth_perm.custom_permissions import CustomPermissionOnlyStaff, CustomPermissionOnlySuperUser
 '''
 following are some authentications and permissions
 
@@ -107,3 +106,18 @@ class GetCustomToken(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=user)
         data = {'token':token.key,'user':user.username}
         return Response(data)
+
+# -------------------------------------------------------------------------
+# 
+
+class OnlyStaffStudentModelViewSet(viewsets.ModelViewSet):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [CustomPermissionOnlyStaff]
+
+class OnlySuperusertudentModelViewSet(viewsets.ModelViewSet):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [CustomPermissionOnlySuperUser]

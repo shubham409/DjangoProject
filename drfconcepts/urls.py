@@ -24,7 +24,10 @@ from drf_auth_perm.views import (
     # ReadonlyStudentsModelViewSet,
     TokenStudentModelViewSet,
     GetCustomToken,
-    
+    OnlyStaffStudentModelViewSet,
+    OnlySuperusertudentModelViewSet
+
+       
 
     )
 from rest_framework.routers import DefaultRouter
@@ -50,6 +53,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 router = DefaultRouter()
 router.register('',TokenStudentModelViewSet,basename='students')
 
+only_staff = DefaultRouter()
+only_staff.register('',OnlyStaffStudentModelViewSet,basename='students')
 
 
 urlpatterns = [
@@ -61,8 +66,9 @@ urlpatterns = [
     # path('staff/',include(router3.urls))
     path('gettoken/',obtain_auth_token),
     path('custom/',GetCustomToken.as_view()),
-    path('tokenauth/',include(router.urls))
-
+    path('tokenauth/',include(router.urls)),
+    path('onlystaff/',include(only_staff.urls)),
+    
 ]
 
 
