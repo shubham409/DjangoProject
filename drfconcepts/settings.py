@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'drf_auth_perm',
     'drf_throttling',
     'drf_pagination',
+    'django_session',
     'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
