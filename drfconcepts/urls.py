@@ -50,7 +50,11 @@ from drf_throttling.views import (
     StudentUpdate
 )
 
+from drf_pagination.views import (
+    PaginationStudents,
+    SpecificViewPaginationStudents,
 
+)
 
 
 
@@ -76,6 +80,10 @@ only_staff.register('',OnlyStaffStudentModelViewSet,basename='students')
 throttling = SimpleRouter()
 throttling.register('',ThrottlingStudents,basename='students')
 
+pagination = DefaultRouter()
+pagination.register('all',PaginationStudents,basename='all')
+
+pagination.register('specific',SpecificViewPaginationStudents,basename='specific')
 
 # all_other = SimpleRouter()
 # all_other.register('',StudentList,basename='list')
@@ -103,6 +111,11 @@ urlpatterns = [
     path('update/<int:pk>/',StudentUpdate.as_view()),
     path('destroy/<int:pk>/',StudentDestroy.as_view()),
     path('retrieve/<int:pk>/',StudentRetrieve.as_view()),
+
+    path('',include(pagination.urls)),
+
+
+
 
     
 ]
