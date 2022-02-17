@@ -35,6 +35,8 @@ from rest_framework.routers import DefaultRouter
 # for getting in build view to get token 
 from rest_framework.authtoken.views import obtain_auth_token
 
+from drf_throttling.views import ThrottlingStudents
+
 
 
 
@@ -50,12 +52,16 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 
 
+
 router = DefaultRouter()
 router.register('',TokenStudentModelViewSet,basename='students')
 
 only_staff = DefaultRouter()
 only_staff.register('',OnlyStaffStudentModelViewSet,basename='students')
 
+
+throttling = DefaultRouter()
+throttling.register('',ThrottlingStudents,basename='students')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -68,6 +74,7 @@ urlpatterns = [
     path('custom/',GetCustomToken.as_view()),
     path('tokenauth/',include(router.urls)),
     path('onlystaff/',include(only_staff.urls)),
+    path('throttling/',include(throttling.urls)),
     
 ]
 

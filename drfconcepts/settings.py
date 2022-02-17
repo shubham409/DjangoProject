@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'customadmin',
     'rest_framework',
     'drf_auth_perm',
+    'drf_throttling',
     'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
