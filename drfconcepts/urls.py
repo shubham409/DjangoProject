@@ -30,12 +30,25 @@ from drf_auth_perm.views import (
        
 
     )
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import (
+    SimpleRouter,
+    DefaultRouter,
+    BaseRouter,
+
+)
 
 # for getting in build view to get token 
 from rest_framework.authtoken.views import obtain_auth_token
 
-from drf_throttling.views import ThrottlingStudents
+from drf_throttling.views import (
+    ThrottlingStudents,
+
+    StudentList,
+    StudentCreate,
+    StudentDestroy,
+    StudentRetrieve,
+    StudentUpdate
+)
 
 
 
@@ -60,8 +73,16 @@ only_staff = DefaultRouter()
 only_staff.register('',OnlyStaffStudentModelViewSet,basename='students')
 
 
-throttling = DefaultRouter()
+throttling = SimpleRouter()
 throttling.register('',ThrottlingStudents,basename='students')
+
+
+# all_other = SimpleRouter()
+# all_other.register('',StudentList,basename='list')
+# all_other.register('',StudentCreate,basename='create')
+# all_other.register('',StudentUpdate,basename='update')
+# all_other.register('',StudentRetrieve,basename='retrieve')
+# all_other.register('',StudentDestroy,basename='destroy')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -75,6 +96,14 @@ urlpatterns = [
     path('tokenauth/',include(router.urls)),
     path('onlystaff/',include(only_staff.urls)),
     path('throttling/',include(throttling.urls)),
+
+    path('list/',StudentList.as_view()),
+    path('create/',StudentCreate.as_view()),
+
+    path('update/<int:pk>/',StudentUpdate.as_view()),
+    path('destroy/<int:pk>/',StudentDestroy.as_view()),
+    path('retrieve/<int:pk>/',StudentRetrieve.as_view()),
+
     
 ]
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from drf_auth_perm.models import Students
+from drf_throttling.models import Students
 
 
 class StudentSerializer(serializers.ModelSerializer):

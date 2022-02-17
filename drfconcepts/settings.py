@@ -133,3 +133,19 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# default throttling rates for anonymous and authenticated user
+REST_FRAMEWORK ={
+    'DEFAULT_THROTTLE_RATES':{
+        'anon':'2/minute',
+        'user':'5/minute',
+        'custom':'8/minute',
+
+        'list':'1/minute',
+        'create':'2/minute',
+        'update':'3/minute',
+        'destroy':'4/minute',
+        'retrieve':'5/minute',
+
+    }
+}
