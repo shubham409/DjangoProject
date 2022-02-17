@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_auth_perm',
     'drf_throttling',
+    'drf_pagination',
     'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -136,16 +137,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # default throttling rates for anonymous and authenticated user
 REST_FRAMEWORK ={
+
+    # for throttling
     'DEFAULT_THROTTLE_RATES':{
         'anon':'2/minute',
         'user':'5/minute',
         'custom':'8/minute',
-
+        # applying on specific views 
         'list':'1/minute',
         'create':'2/minute',
         'update':'3/minute',
         'destroy':'4/minute',
         'retrieve':'5/minute',
+    },
 
-    }
+    # for pagination 
+
 }
